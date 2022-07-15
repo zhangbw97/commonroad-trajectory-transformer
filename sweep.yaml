@@ -1,0 +1,35 @@
+entity: bowenzhang # Set your wandb entity name here
+project: train_trajectory_transformer_trajectorygenerator # Set your wandb project name here
+program:  # Leave this blank
+
+# Reference:
+#  https://docs.wandb.ai/guides/sweeps/configuration
+
+method: bayes
+early_terminate:
+  type: hyperband
+  eta: 2
+  max_iter: 80000
+  s: 5
+metric:
+  name: val_loss
+  goal: minimize
+parameters:
+  learning_rate:
+    distribution: uniform
+    min: 0.0001
+    max: 0.01
+  n_layers:
+    values: [4, 5, 6, 7, 8]
+  embd_dim_and_n_head:
+    values: [[9,3], [12,3],[12,4], [15,3], [15,5]]
+  # attn_drop:
+  #   values: [0.1,0.2,0.3]
+  # resid_pdrop:
+  #   values: [0.1,0.2,0.3]
+  # attn_drop:
+  #   values: [0.1,0.2,0.3]
+ 
+command:
+  - python
+  - ${program}
